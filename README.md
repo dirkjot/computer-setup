@@ -35,6 +35,8 @@ WindowKey Left etc on Windows.
 	  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 	  type = cat-file -t
 	  dump = cat-file -p
+	  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	  lola9 = log --graph --decorate --pretty=oneline --abbrev-commit --all -9
 
 end
 
