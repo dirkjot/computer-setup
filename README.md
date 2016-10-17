@@ -25,9 +25,15 @@ WindowKey Left etc on Windows.
 - brew install node   or ` brew install homebrew/versions/node4-lts`
 - brew install joe
 
+- brew install mongodb
+- sudo mkdir -p /data/db; env ME=$(id -un) sudo chown -R  ${ME}: /data
+- brew services start mongodb  [ does not work right today ]
+
+
 for [git duet:](https://github.com/git-duet/git-duet)
 - brew tap git-duet/tap
 - brew install git-duet
+
 
 
 ## simple .gitconfig:
