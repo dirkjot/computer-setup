@@ -25,23 +25,115 @@ WindowKey Left etc on Windows.
 - brew install node   or ` brew install homebrew/versions/node4-lts`
 - brew install joe
 
-- simple .gitconfig:
-```
-	[user]
-		name = Dirk P. Janssen
-		email = djanssen@pivotal.io
+for [git duet:](https://github.com/git-duet/git-duet)
+- brew tap git-duet/tap
+- brew install git-duet
 
-	[alias]
-	  co = checkout
-	  ci = commit
-	  st = status
-	  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-	  type = cat-file -t
-	  dump = cat-file -p
-	  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-	  lola9 = log --graph --decorate --pretty=oneline --abbrev-commit --all -9
+
+## simple .gitconfig:
 ```
-end
+[user]
+        name = dirkjot
+        email = dirkjot@dirkjot
+[alias]
+	cb = rev-parse --abbrev-ref HEAD
+	ci = commit
+	co = checkout
+	dci = duet-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola9 = log --graph --decorate --pretty=oneline --abbrev-commit -n9
+	pl = pull --ff-only
+        st = status
+        unpushed = log --branches --not --remotes --simplify-by-decoration --decorate --oneline
+	ready = rebase -i @{u}
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+	story = "!f() { n=$1; story=$(sed -e \"s/#//\" <<< $n); branch=$(git branch -a | grep -o \"$story[-_a-zA-Z]*\" | head -n 1); git checkout $branch; }; f"
+	
+[core]
+	editor = /usr/bin/nano
+	excludesfile = /Users/pivotal/.gitignore_global
+	autocrlf = input
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Users/pivotal/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[mergetool "bc3"]
+	cmd = \"/Users/pivotal/Applications/Beyond Compare.app/Contents/MacOS/bcomp\"  \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
+[merge]
+    tool=bc3
+```
+
+
+
+## IntelliJ
+
+Install the following plugins
+- lines sorter [also on github](https://github.com/syllant/idea-plugin-linessorter)
+- angular
+- karma
+- nodeJS
+
+Set up git-duet with intellij by adding this script to your repo, then pointing intellij to the script as your git exectuable (search in settings for `path to git`). We usually call this `intellij_git_duet_wrapper.sh`:
+
+```
+#!/usr/bin/env bash
+
+if [[ "$3" == "commit" ]] ; then
+ shift 3
+  exec git duet-commit "$@"
+fi
+
+exec git "$@"
+```
+
+
+## Hooks
+
+### precommit
+
+This precommit hook will run jshint and scan your sourcefiles for 'verboten' words.  In the example: `fdescribe(`, `fit(` as first token on line).  This assumes your tests live in `test/` and there is a `test/node_modules` directory that you do not want to check.  
+
+```
+#!/usr/bin/env bash
+
+# INSTALL THIS WITH:
+# bash$  ln -s $PWD/scripts/precommit_hook.sh .git/hooks/pre-commit
+
+grunt jshint # or whatever runs your linter
+hintresult=$?
+
+find test/ -type f -name "*spec.js"  -not -path "test/node_modules/*" -exec egrep '^ *(fit|fdescribe) *\(' {}  \+
+findresult=$?
+
+if [[ $findresult -ne 0 ]]; then
+  if [[ hintresult ]]; then
+       exit 0
+  fi
+fi
+exit 1
+
+```
+
+### postreceive
+This hook notifies jenkins that a new commit has been made.  You can put the polling frequency to once an hour or so once you have this running. 
+
+```
+#!/usr/bin/env bash
+set -e
+
+# INSTALL THIS WITH:
+# bash$  ln -s $PWD/scripts/postreceive_hook.sh .git/hooks/post-receive
+
+
+curl http://JENKINSURL:8080/git/notifyCommit?url=https://github.com/GITHUBUSER/GITHUBREPO.git
+exit 0
+
+```
+
 
 
 
