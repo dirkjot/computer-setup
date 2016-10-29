@@ -35,7 +35,6 @@ for [git duet:](https://github.com/git-duet/git-duet)
 - brew install git-duet
 
 
-
 ## simple .gitconfig:
 ```
 [user]
