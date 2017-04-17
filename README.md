@@ -29,9 +29,12 @@ WindowKey Left etc on Windows.
 
 - install IntelliJ
 - install brew `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+- brew tap caskroom/cask
+- brew cask install meld
+- brew cask install java  # (if not already installed)
 - brew install markdown
 - brew install ruby
-- brew install node   or ` brew install homebrew/versions/node4-lts`
+- brew install node   # or ` brew install homebrew/versions/node4-lts`
 - brew install joe
 
 - brew install mongodb
