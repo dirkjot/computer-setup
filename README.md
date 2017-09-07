@@ -48,6 +48,8 @@ for [git duet:](https://github.com/git-duet/git-duet)
 
 
 ## simple .gitconfig:
+I don't always use Nano as my default editor, but if you are working with clients who don't use VIM it certainly helps. 
+
 ```
 [user]
         name = dirkjot
@@ -70,18 +72,17 @@ for [git duet:](https://github.com/git-duet/git-duet)
 	editor = /usr/bin/nano
 	excludesfile = /Users/pivotal/.gitignore_global
 	autocrlf = input
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Users/pivotal/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[mergetool "bc3"]
-	cmd = \"/Users/pivotal/Applications/Beyond Compare.app/Contents/MacOS/bcomp\"  \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
 [merge]
-    tool=bc3
+    tool = meld
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+
 ```
 
 
