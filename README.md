@@ -151,6 +151,18 @@ exit 0
 
 ```
 
+## Setup an ssh config
 
+Greatly improve your ssh experience.  This is an example, partially stolen from [nerderati.com](http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/)
+
+```
+Host tunnel
+    HostName database.example.com
+    IdentityFile ~/.ssh/coolio.example.key
+    LocalForward 9906 127.0.0.1:3306
+    User coolio
+Host github.com
+    IdentityFile ~/.ssh/github.key
+```
 
 
