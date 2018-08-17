@@ -100,13 +100,15 @@ Set up git-duet with intellij by adding this script to your repo, then pointing 
 ```
 #!/usr/bin/env bash
 
-if [[ "$3" == "commit" ]] ; then
- shift 3
-  exec git duet-commit "$@"
+if [[ "$5" == "commit" ]] ; then
+  set -- "${@:1:4}" "duet-commit" "${@:6}"
 fi
 
 exec git "$@"
+
 ```
+
+This script has now been updated for IntelliJ 18.x, which sends two `-c OPTION` commands with every git commit.  
 
 
 ## Hooks
